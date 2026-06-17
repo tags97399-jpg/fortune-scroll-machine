@@ -51,9 +51,9 @@ export function generateHoroscope(
         ? 'The machine is running in keepsake preview mode until the final ephemeris is connected.'
         : `${snapshot.moonPhase}. ${snapshot.notableTransits.join(' ')}`,
     sections,
-    luckyNumbers: request.mode === 'birthday' ? ['6', '17', '26'] : ['3', '8', '14'],
-    luckyColors: request.zodiacSign === 'Gemini' ? ['Royal blue', 'Faded gold', 'Ink navy'] : ['Cream', 'Old gold', 'Deep ink'],
-    luckySymbols: ['A paper star', 'A blue tube', 'A message saved for later'],
+    luckyNumbers: getLuckyNumbers(request),
+    luckyColors: getLuckyColors(request),
+    luckySymbols: getLuckySymbols(request),
     finalFortune:
       request.mode === 'birthday'
         ? 'The scroll ends where the year begins: with the Twins listening at two doors. One door opens to memory, the other to invention. Walk through both, but carry only what still has a pulse.'
@@ -67,6 +67,56 @@ export function generateHoroscope(
         }
       : undefined,
   }
+}
+
+function getLuckyNumbers(request: ScrollRequest): string[] {
+  if (request.mode === 'birthday' && request.zodiacSign === 'Gemini' && request.targetDate === '2026-06-17') {
+    return [
+      '3 - Gemini/Mercury: words, wit, short trips, messages',
+      '17 - the birthday key',
+      '26 - the year marker, reduced to 8: endurance and earned power',
+    ]
+  }
+
+  if (request.mode === 'birthday') {
+    return ['3 - speak it', '8 - build it', '12 - close the old circle']
+  }
+
+  return ['3 - messages', '8 - steady effort', '14 - useful surprise']
+}
+
+function getLuckyColors(request: ScrollRequest): string[] {
+  if (request.mode === 'birthday' && request.zodiacSign === 'Gemini' && request.targetDate === '2026-06-17') {
+    return [
+      'Electric blue for Uranus in Gemini',
+      'Moonlit cream for the Cancer Moon',
+      'Old gold for Venus in Leo',
+      'Ink black for Pluto in Aquarius',
+    ]
+  }
+
+  if (request.zodiacSign === 'Gemini') {
+    return ['Royal blue', 'Mercury silver', 'Notebook cream']
+  }
+
+  return ['Aged cream', 'Old gold', 'Deep ink']
+}
+
+function getLuckySymbols(request: ScrollRequest): string[] {
+  if (request.mode === 'birthday' && request.zodiacSign === 'Gemini' && request.targetDate === '2026-06-17') {
+    return [
+      'A blue paper scroll with white caps',
+      'Two bicycles beneath summer skies',
+      'A message saved, then finally answered',
+      'A small machine that still works',
+    ]
+  }
+
+  if (request.mode === 'birthday') {
+    return ['A folded note', 'A warm light in a window', 'A door opening quietly']
+  }
+
+  return ['A paper star', 'A useful message', 'A coin found twice']
 }
 
 function buildBirthdaySections(

@@ -430,8 +430,7 @@ select:focus-visible {
   padding-top: 98px;
 }
 
-.machine-stage::before {
-  content: '25¢  ·  YOUR MONTHLY HOROSCOPE  ·  SELECT YOUR SIGN';
+.machine-marquee {
   position: absolute;
   top: 16px;
   left: 50%;
@@ -810,7 +809,7 @@ select:focus-visible {
     padding-top: 108px;
   }
 
-  .machine-stage::before {
+  .machine-marquee {
     top: 18px;
     font-size: 0.65rem;
     line-height: 1.35;

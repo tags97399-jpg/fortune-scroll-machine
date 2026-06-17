@@ -43,6 +43,11 @@ function App() {
     setIsOpen(true)
   }
 
+  const machineHeader =
+    mode === 'birthday'
+      ? '25¢  ·  BIRTHDAY HOROSCOPE  ·  JUNE 17, 2026'
+      : `25¢  ·  ${mode.toUpperCase()} HOROSCOPE  ·  SELECT YOUR SIGN`
+
   return (
     <main className="app-shell">
       <header className="top-bar">
@@ -121,6 +126,7 @@ function App() {
             <span className="gum-sign">Bubble<br />Gum<br />5c</span>
           </div>
           <div className="machine-stage">
+            <div className="machine-marquee">{machineHeader}</div>
             <HoroscopeTube sign={sign} isOpen={isOpen} onUnroll={unroll} />
             <ScrollAnimation
               fortune={fortune}

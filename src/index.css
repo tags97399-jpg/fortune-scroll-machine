@@ -425,7 +425,7 @@ select:focus-visible {
   position: relative;
   z-index: 1;
   width: min(760px, calc(100% - 34px));
-  min-height: 1180px;
+  min-height: 2100px;
   margin: -96px auto 80px;
   padding-top: 98px;
 }
@@ -789,7 +789,7 @@ select:focus-visible {
 
   .counter-scene {
     order: 1;
-    min-height: 680px;
+    min-height: 980px;
   }
 
   .mode-grid {

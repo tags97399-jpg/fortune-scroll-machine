@@ -18,7 +18,7 @@ export function ScrollAnimation({ fortune, sign, isOpen, onRollBack }: ScrollAni
       className="paper-scroll"
       initial={false}
       animate={{
-        maxHeight: isOpen ? 1900 : 186,
+        maxHeight: isOpen ? 3600 : 186,
         opacity: isOpen ? 1 : 0.94,
       }}
       transition={{ duration: 1.25, ease: [0.2, 0.8, 0.2, 1] }}

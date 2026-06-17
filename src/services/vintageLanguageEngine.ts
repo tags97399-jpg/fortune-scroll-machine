@@ -11,14 +11,23 @@ export function writeVintageLine(
   request: ScrollRequest,
   snapshot: AstrologySnapshot,
   theme: string,
+  index = 0,
 ): string {
   const period = modeLabels[request.mode]
   const moon =
     snapshot.moonSign === 'Verification needed'
       ? 'the changing moon'
       : `the ${snapshot.moonPhase.toLowerCase()}`
+  const endings = [
+    `Let ${moon} show you which feeling belongs in the room before you answer too quickly.`,
+    `A small practical act will tell fate you are ready for the larger one.`,
+    `Say less for performance and more for truth; the right person will hear the difference.`,
+    `Keep your coins, tools, and promises where you can see them.`,
+    `Rest before the signal turns to static.`,
+    `The oldest wish is not necessarily the childish one.`,
+  ]
 
-  return `${theme} ${period}, dear ${request.zodiacSign}. ${moon} turns a small memory into a signal. Move gently, speak clearly, and trust the idea that keeps tapping at the window.`
+  return `${theme} ${period}, dear ${request.zodiacSign}. ${endings[index % endings.length]}`
 }
 
 export function formatDate(date: string): string {

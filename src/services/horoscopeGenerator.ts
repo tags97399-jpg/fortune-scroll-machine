@@ -1,5 +1,6 @@
 import type {
   AstrologySnapshot,
+  FortuneSection,
   FortuneScroll,
   ScrollRequest,
 } from '../types/scrollTypes'
@@ -24,14 +25,7 @@ const sectionSets = {
     ['Personal Growth', '✦', 'Your next chapter does not need permission from the last one.'],
     ['Watchpoint', '!', 'Do not confuse speed with destiny. The good thing can arrive slowly and still be yours.'],
   ],
-  birthday: [
-    ['Birthday Week Forecast', '☀', 'This birthday week opens a little door between who you were and who you are building next.'],
-    ['Year Ahead Preview', '✦', 'Uranus in Gemini makes your voice feel electric again. Ideas that once looked impractical may finally find a container.'],
-    ['Love & Friendship', '♡', 'The starry thread of old friendship glows brighter than expected. Let memory be a bridge, not a museum.'],
-    ['Money & Business', '♢', 'Build the thing that can keep working after the first burst of excitement fades.'],
-    ['Health & Energy', '+', 'Your nervous system wants simpler mornings, warmer evenings, and fewer false emergencies.'],
-    ['Message From The Stars', '★', 'Begin again, but keep the parts of yourself that survived beautifully.'],
-  ],
+  birthday: [],
 } as const
 
 export function generateHoroscope(
@@ -40,11 +34,14 @@ export function generateHoroscope(
 ): FortuneScroll {
   const date = formatDate(request.targetDate)
   const modeTitle = request.mode === 'birthday' ? 'Birthday Fortune Scroll' : `${capitalize(request.mode)} Fortune Scroll`
-  const sections = sectionSets[request.mode].map(([title, icon, seed]) => ({
-    title,
-    icon,
-    body: writeVintageLine(request, snapshot, seed),
-  }))
+  const sections =
+    request.mode === 'birthday'
+      ? buildBirthdaySections(request, snapshot)
+      : sectionSets[request.mode].map(([title, icon, seed], index) => ({
+          title,
+          icon,
+          body: writeVintageLine(request, snapshot, seed, index),
+        }))
 
   return {
     heading: `${request.zodiacSign} ${modeTitle}`,
@@ -59,17 +56,105 @@ export function generateHoroscope(
     luckySymbols: ['A paper star', 'A blue tube', 'A message saved for later'],
     finalFortune:
       request.mode === 'birthday'
-        ? 'A year is not only a number. It is a match struck in the dark, a tiny scroll unrolling, a proof that wonder was not wasted on the child you used to be.'
+        ? 'The scroll ends where the year begins: with the Twins listening at two doors. One door opens to memory, the other to invention. Walk through both, but carry only what still has a pulse.'
         : 'The best sign today is the one that makes you curious enough to keep going.',
     friendScroll: request.friendMode
       ? {
           title: 'Friend Scroll',
           icon: '♊',
           body:
-            'For the First Week of June Gemini: two bicycles beneath summer skies remain the lucky symbol. Years pass, roads split, and still the old drugstore light finds both riders. The best journeys are not measured by miles traveled, but by who was riding beside you.',
+            'For the First Week of June Gemini: your friend is under the same strange Gemini weather, but with a softer Cancer Moon pulling the story back toward kitchens, porches, old neighborhoods, and the places where people first learn loyalty. Venus in Leo asks that affection be shown plainly, while Pluto in Aquarius proves that even long friendships can change shape without losing their thread. Lucky symbol: two bicycles beneath summer skies. The best journeys are not measured by miles traveled, but by who was riding beside you.',
         }
       : undefined,
   }
+}
+
+function buildBirthdaySections(
+  request: ScrollRequest,
+  snapshot: AstrologySnapshot,
+): FortuneSection[] {
+  const isGeminiBirthday =
+    request.zodiacSign === 'Gemini' && request.targetDate === '2026-06-17'
+
+  if (!isGeminiBirthday) {
+    return [
+      {
+        title: 'Birthday Week Forecast',
+        icon: '☀',
+        body: writeVintageLine(request, snapshot, 'The birthday gate opens with a message that should not be rushed.', 0),
+      },
+      {
+        title: 'Year Ahead Preview',
+        icon: '✦',
+        body: writeVintageLine(request, snapshot, 'The year asks for one honest beginning and one practical promise.', 1),
+      },
+      {
+        title: 'Love & Friendship',
+        icon: '♡',
+        body: writeVintageLine(request, snapshot, 'Old affection returns with a question tucked inside it.', 2),
+      },
+      {
+        title: 'Money & Business',
+        icon: '♢',
+        body: writeVintageLine(request, snapshot, 'Useful work grows when the plan is simple enough to repeat.', 3),
+      },
+      {
+        title: 'Health & Energy',
+        icon: '+',
+        body: writeVintageLine(request, snapshot, 'Your body votes for steadiness before spectacle.', 4),
+      },
+      {
+        title: 'Message From The Stars',
+        icon: '★',
+        body: writeVintageLine(request, snapshot, 'Keep the sign that still makes you curious.', 5),
+      },
+    ]
+  }
+
+  return [
+    {
+      title: 'Birthday Week Forecast',
+      icon: '☀',
+      body:
+        'The Sun is still in Gemini, and the Waxing Crescent Moon in Cancer makes this birthday less about being louder and more about being truer. The week favors a private reset: clear one corner, answer one old message, name one wish without apologizing for it. The stars do not ask you to become brand new. They ask you to let the living parts of you come forward again.',
+    },
+    {
+      title: 'Year Ahead Preview',
+      icon: '✦',
+      body:
+        'Uranus in Gemini is the headline of the year: a lightning wire running through your sign. Expect sudden ideas, odd coincidences, revived talents, and a restless need to say things in your own language. This is not a quiet transit, but it can be a liberating one. Keep a notebook nearby. The strange thought that arrives sideways may become the doorway.',
+    },
+    {
+      title: 'Love & Friendship',
+      icon: '♡',
+      body:
+        'Venus in Leo stands opposite Pluto retrograde in Aquarius, so affection may feel dramatic, revealing, or impossible to keep casual. Friendship is not background music under this sky; it is a mirror. Notice who celebrates your shine without trying to own it. Notice who makes your younger self feel safe. A loyal bond can deepen now, but only if everyone is allowed to be fully alive.',
+    },
+    {
+      title: 'Money & Business',
+      icon: '♢',
+      body:
+        'Mars in Taurus gives the practical instruction: make the beautiful thing durable. Do not chase every spark Uranus throws across the room. Pick the idea with legs, price it honestly, give it a container, and let repetition become part of the magic. A modest system built this summer can outlast a dramatic burst of inspiration.',
+    },
+    {
+      title: 'Health & Energy',
+      icon: '+',
+      body:
+        'Mercury and Jupiter in Cancer put the nervous system near the family album. Your body may react to memory before your mind has words for it. Food, rest, water, quiet rooms, and familiar voices are not small medicine this week. Protect your softness without mistaking it for weakness. The shell is not a prison; sometimes it is how the pearl survives.',
+    },
+    {
+      title: 'Creativity & Voice',
+      icon: '✎',
+      body:
+        'Saturn and Neptune in Aries ask for courage with edges. Dream, yes, but give the dream a date, a file name, a first draft, a table, a stitch, a button that actually works. Your Gemini gift is motion; your birthday lesson is embodiment. The vision wants hands.',
+    },
+    {
+      title: 'Message From The Stars',
+      icon: '★',
+      body:
+        'Pluto in Aquarius speaks through communities, machines, archives, and long-distance signals. Somewhere between childhood memory and future technology, a new version of belonging is trying to form. Follow the thread that feels both old and impossible. That is where the year begins.',
+    },
+  ]
 }
 
 function capitalize(value: string): string {
